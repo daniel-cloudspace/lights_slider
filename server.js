@@ -26,7 +26,8 @@ socket.on('connection', function(client) {
 
   client.on('message', function(message){
     console.log(message);
-    lightswitch_socket.send('FF', 0, 2, 9802, '97.102.15.225', function(a,b,c) { console.log(a,b,c);});
+    var buffer = new Buffer("FF");
+    lightswitch_socket.send(buffer, 0, 2, 9802, '97.102.15.225', function(a,b,c) { console.log(a,b,c);});
   });
 });
 
