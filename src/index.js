@@ -1,8 +1,4 @@
 Ext.setup({
-    icon: 'icon.png',
-    tabletStartupScreen: 'tablet_startup.png',
-    phoneStartupScreen: 'phone_startup.png',
-    glossOnIcon: false,
     onReady: function() {
        var form;
 
@@ -12,7 +8,7 @@ Ext.setup({
                xtype: 'sliderfield',
                name : 'height',
                label: 'Height',
-               dragend: function(s,t,v) { console.log(s,t,v); }
+               listeners: { drag: function(a,b,c) { console.log(a,b,c); } }
            }]
   
        };
@@ -32,6 +28,7 @@ Ext.setup({
         }
         
         form = new Ext.form.FormPanel(formBase);
+        window.r = form;
         form.show();
     }
 });
