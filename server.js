@@ -28,7 +28,7 @@ socket.on('connection', function(client) {
     console.log(message);
     var value_in_hex = parseInt(message.slider_value).toString(16);
     var buffer = new Buffer(value_in_hex + "00000000000000\x0d\x0a");
-    lightswitch_socket.send(buffer, 0, 2, 9802, '97.102.15.225', function(a,b,c) { console.log(a,b,c);});
+    lightswitch_socket.send(buffer, 0, 18, 9802, '97.102.15.225', function(a,b,c) { console.log(a,b,c);});
   });
 });
 
