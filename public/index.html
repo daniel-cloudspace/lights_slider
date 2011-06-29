@@ -26,9 +26,9 @@
                    items: [
                    {
                        xtype: 'sliderfield',
-                       name : 'height',
-                       label: 'Height',
-                       listeners: { dragend: function(a,b,c) { 
+                       name : 'lamp',
+                       label: 'Lamp',
+                       listeners: { drag: function(a,b,c) { 
                             // send slider value to the server on slide
                             socket.send({ slider_value: c});
                        } }

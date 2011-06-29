@@ -27,19 +27,16 @@ var socket = io.listen(app);
 socket.on('connection', function(client) {
 
   client.on('message', function(message){
-    console.log(message);
-    lightswitch_value = message.slider_value;
+
+    var value = (Math.floor(parseInt(message.slider_value)*2.55))
+    var value_in_hex = value.toString(16);
+    if (value <= 16) value_in_hex = "0" + value_in_hex;
+    var buffer = new Buffer("0000000000" + value_in_hex + "0000\x0d\x0a");
+    console.log(value_in_hex, buffer);
+
+    lightswitch_socket.send(buffer, 0, 18, 9802, '97.102.15.225', function(a,b,c) {
+        console.log(a,b,c);
+    });
   });
 });
-
-setInterval(function() {
-    if ( lightswitch_value != last_lightswitch_value ) {
-        var value_in_hex = (parseInt(lightswitch_value)*2.55).toString(16);
-        var buffer = new Buffer("0000000000" + value_in_hex + "0000\x0d\x0a");
-        lightswitch_socket.send(buffer, 0, 18, 9802, '97.102.15.225', function(a,b,c) {
-            console.log(a,b,c);
-        });
-        last_lightswitch_value = lightswitch_value;
-    }
-}, 100);
 
