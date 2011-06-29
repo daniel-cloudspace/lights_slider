@@ -5,8 +5,8 @@ var io = require("socket.io");
 var dgram = require('dgram');
 
 var lightswitch_socket = dgram.createSocket("udp4");
-var lightswitch_value;
-var last_lightswitch_value;
+var lightswitch_value = 0;
+var last_lightswitch_value = 0;
 
 app = express.createServer();
 
@@ -32,7 +32,7 @@ socket.on('connection', function(client) {
   });
 });
 
-setTimeout(function() {
+setInterval(function() {
     if ( lightswitch_value != last_lightswitch_value ) {
         var value_in_hex = (parseInt(lightswitch_value)*2.55).toString(16);
         var buffer = new Buffer("0000000000" + value_in_hex + "0000\x0d\x0a");
@@ -41,6 +41,5 @@ setTimeout(function() {
         });
         last_lightswitch_value = lightswitch_value;
     }
-}, 50);
-
+}, 100);
 
