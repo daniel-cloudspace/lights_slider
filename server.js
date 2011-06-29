@@ -5,7 +5,7 @@ var io = require("socket.io");
 
 app = express.createServer();
 
-app.listen(80);
+app.listen(8080);
 
 
 app.configure(function(){
