@@ -1,7 +1,7 @@
 var express = require('express');
 var sys = require("sys");
 var util = require('util');
-var io = require("socket.io");
+var socketio = require("socket.io");
 var dgram = require('dgram');
 
 var lightswitch_socket = dgram.createSocket("udp4");
@@ -12,7 +12,6 @@ app = express.createServer();
 
 app.listen(8080);
 
-
 app.configure(function(){
     app.use(express.methodOverride());
     app.use(express.bodyParser());
@@ -21,22 +20,21 @@ app.configure(function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
+var io = socketio.listen(app);
 
-var socket = io.listen(app);
+io.sockets.on('connection', function(client) {
 
-socket.on('connection', function(client) {
+  client.on('slider', function(message) {
 
-  client.on('message', function(message){
-
-    var value = (Math.floor(parseInt(message.slider_value)*2.55))
+    var value = (Math.floor(parseInt(message.value)*2.55));
     var value_in_hex = value.toString(16);
-    if (value <= 16) value_in_hex = "0" + value_in_hex;
-    var buffer = new Buffer("0000000000" + value_in_hex + "0000\x0d\x0a");
-    console.log(value_in_hex, buffer);
 
-    lightswitch_socket.send(buffer, 0, 18, 9802, '97.102.15.225', function(a,b,c) {
-        console.log(a,b,c);
-    });
+    if (value <= 16) value_in_hex = "0" + value_in_hex;
+
+    var buffer = new Buffer("0000000000" + value_in_hex + "0000\x0d\x0a");
+
+    lightswitch_socket.send(buffer, 0, 18, 9802, '192.168.0.1');
+
   });
 });
 
